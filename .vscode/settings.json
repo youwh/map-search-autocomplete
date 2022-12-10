@@ -1,0 +1,19 @@
+{
+    "typescript.preferences.quoteStyle": "single",
+    "[typescript]": {
+        "editor.formatOnSave": true
+    },
+    "[typescriptreact]": {
+        "editor.formatOnSave": true
+    },
+    "colorize.languages": [
+        "typescript",
+        "javascript",
+        "javascriptreact",
+        "typescriptreact",
+        "css",
+        "scss",
+        "json",
+        "jsonc",
+    ]
+}
