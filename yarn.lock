@@ -8223,7 +8223,7 @@
   dependencies:
     "queue-microtask" "^1.2.2"
 
-"rxjs@^7.0.0":
+"rxjs@^7.0.0", "rxjs@^7.6.0":
   "integrity" "sha512-DDa7d8TFNUalGC9VqXvQ1euWNN7sc63TrUCuM9J998+ViviahMIjKSOU7rfcgFOF+FCD71BhDRv4hrFz+ImDLQ=="
   "resolved" "https://registry.npmjs.org/rxjs/-/rxjs-7.6.0.tgz"
   "version" "7.6.0"

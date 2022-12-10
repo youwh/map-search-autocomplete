@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { BehaviorSubject, debounceTime } from 'rxjs'
 import usePlaceAutoComplete from '../../hooks/usePlaceAutoComplete'
 import usePlaceLocation from '../../hooks/usePlaceLocation'
+import searchStore from '../../store/searchStore'
 import styles from './SearchInput.module.css'
 
 const inputChange = new BehaviorSubject('')
@@ -19,7 +20,7 @@ function SearchInput() {
     const subscription = inputChanged.pipe(debounceTime(500)).subscribe((value) => {
       search(value, (response: any) => {
         // response handler
-        console.log('sucess', response)
+        // console.log('sucess', response)
 
         const opts: OptionType[] = []
         response.predictions.map((predict: any) => {
@@ -45,12 +46,16 @@ function SearchInput() {
   }
 
   const onSelect = (data: string) => {
-    const placeId: string | undefined = options.find((option) => option.value === data)?.placeId
-    if (placeId) {
-      locate(placeId, (response: any) => {
+    const selectedOpt: OptionType | undefined = options.find((option) => option.value === data)
+    if (selectedOpt) {
+      locate(selectedOpt.placeId, (response: any) => {
         // response handler
+
         const location = response.result.geometry.location
-        console.log('location', location)
+        searchStore.search({
+          ...selectedOpt,
+          center: location,
+        })
       })
     }
   }
