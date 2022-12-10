@@ -1,20 +1,23 @@
 import { AutoComplete } from 'antd'
 import { useEffect, useRef, useState } from 'react'
+import { BehaviorSubject, debounceTime } from 'rxjs'
 import usePlaceAutoComplete from '../../hooks/usePlaceAutoComplete'
 import usePlaceLocation from '../../hooks/usePlaceLocation'
 import styles from './SearchInput.module.css'
+
+const inputChange = new BehaviorSubject('')
+const inputChanged = inputChange.asObservable()
 
 function SearchInput() {
   const { search } = usePlaceAutoComplete()
   const { locate } = usePlaceLocation()
   const inputRef = useRef<any>()
 
-  const [searchValue, setSearchValue] = useState('')
   const [options, setOptions] = useState<OptionType[]>([])
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      search(searchValue, (response: any) => {
+    const subscription = inputChanged.pipe(debounceTime(500)).subscribe((value) => {
+      search(value, (response: any) => {
         // response handler
         console.log('sucess', response)
 
@@ -30,14 +33,15 @@ function SearchInput() {
       }).catch((error) => {
         // error handler
       })
-    }, 500)
+    })
+
     return () => {
-      timeout && clearTimeout(timeout)
+      return subscription.unsubscribe()
     }
-  }, [searchValue])
+  }, [])
 
   const onChange = (value: string) => {
-    setSearchValue(value)
+    inputChange.next(value)
   }
 
   const onSelect = (data: string) => {
@@ -54,7 +58,7 @@ function SearchInput() {
   return (
     <div className={styles.inputContainer}>
       <AutoComplete
-        value={searchValue}
+        // value={searchValue}
         options={options}
         style={{ width: 200 }}
         onSelect={onSelect}
