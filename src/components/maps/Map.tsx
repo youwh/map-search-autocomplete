@@ -9,10 +9,11 @@ const defaultProps = {
 }
 
 export default function Map(props: { children?: React.ReactNode }) {
+  console.log('run map')
   return (
     <div style={{ height: '100vh', width: '100%' }}>
       <GoogleMapReact
-        bootstrapURLKeys={{ key: '' }}
+        // bootstrapURLKeys={{ key: 'AIzaSyCo6OJY_TKn8jRkEH5o9YBqQqsz0FJryYE' }}
         defaultCenter={defaultProps.center}
         defaultZoom={defaultProps.zoom}
       >
