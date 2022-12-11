@@ -37,6 +37,12 @@ function Map() {
     const marker = (mark = new maps.Marker({
       position: searchData?.center,
       map,
+      icon: {
+        url: require('../../assets/marker.webp'), // url
+        scaledSize: new google.maps.Size(50, 50), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(0, 0), // anchor
+      },
     }))
     return marker
   }
@@ -51,7 +57,6 @@ function Map() {
         onGoogleApiLoaded={({ map, maps }) => {
           setMap(map)
           renderMarker(map, maps)
-          // Marker(map, maps)
         }}
       ></GoogleMapReact>
     </div>
