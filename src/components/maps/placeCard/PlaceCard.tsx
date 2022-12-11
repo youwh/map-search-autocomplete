@@ -39,13 +39,13 @@ function PlaceCard() {
     searchData ? (toggle ? styles.show : styles.hide) : styles.initHide
   }`
 
+  console.log(searchData)
   return (
     <div className={classes}>
       <div className={styles.top}>
-        <span className={styles.title}>{searchData?.name}</span>
+        <span className={styles.title}>{searchData?.value}</span>
         <CloseOutlined onClick={onClick} className={styles.closeIcon} />
       </div>
-      {searchData?.label}
       <div className={styles.photos}>
         {Object.values(photos).map((value: any) => {
           return (
