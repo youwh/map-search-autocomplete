@@ -1,6 +1,7 @@
 import GoogleMapReact from 'google-map-react'
 import { useEffect, useState } from 'react'
 import searchStore, { SearchData } from '../../store/searchStore'
+import withSearch from './withSearch'
 
 const defaultProps = {
   center: {
@@ -10,7 +11,8 @@ const defaultProps = {
   zoom: 16,
 }
 
-function Map(props: { children?: React.ReactNode }) {
+let mark
+function Map() {
   const [map, setMap] = useState<any>()
   const [searchData, setSearchData] = useState<Partial<SearchData>>({
     center: {
@@ -23,24 +25,37 @@ function Map(props: { children?: React.ReactNode }) {
   }, [])
 
   useEffect(() => {
-    console.log('update', searchData.center)
+    console.log('moveTo', searchData.center)
     map?.panTo(searchData.center)
+    map?.setZoom(defaultProps.zoom)
+    mark?.setPosition(
+      new google.maps.LatLng(searchData.center?.lat || 0, searchData.center?.lng || 0),
+    )
   }, [searchData])
+
+  const renderMarker = (map, maps) => {
+    const marker = (mark = new maps.Marker({
+      position: searchData?.center,
+      map,
+    }))
+    return marker
+  }
 
   return (
     <div style={{ height: '100vh', width: '100%' }}>
       <GoogleMapReact
-        // bootstrapURLKeys={{ key: 'AIzaSyCo6OJY_TKn8jRkEH5o9YBqQqsz0FJryYE' }}
+        bootstrapURLKeys={{ key: 'AIzaSyAWfo1wqrNQ2uy8nfD1gy2xa66RZD1yQBA' }}
         defaultCenter={searchData.center}
         defaultZoom={defaultProps.zoom}
+        yesIWantToUseGoogleMapApiInternals
         onGoogleApiLoaded={({ map, maps }) => {
           setMap(map)
+          renderMarker(map, maps)
+          // Marker(map, maps)
         }}
-      >
-        {props.children}
-      </GoogleMapReact>
+      ></GoogleMapReact>
     </div>
   )
 }
 
-export default Map
+export default withSearch(Map)

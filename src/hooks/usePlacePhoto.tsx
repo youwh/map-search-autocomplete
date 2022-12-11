@@ -1,24 +1,22 @@
 import { useCallback, useState } from 'react'
 import { key } from '../App'
 
-const api = 'https://maps.googleapis.com/maps/api/place/details/json'
+const api = 'https://maps.googleapis.com/maps/api/place/photo'
 
-const usePlaceLocation = () => {
+const usePlacePhoto = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<unknown>(null)
 
-  const locate = useCallback(async ($placeId: string, $handler: ($response: unknown) => void) => {
+  const photo = useCallback(async ($photoId: string, $handler: ($response: unknown) => void) => {
     setIsLoading(true)
     setError(null)
 
     try {
-      const response = await fetch(`${api}?placeid=${$placeId}&fields=geometry,photos&key=${key}`)
+      const response = await fetch(`${api}?maxwidth=600&photo_reference=${$photoId}&key=${key}`)
       if (!response.ok) {
         throw new Error('Request failed')
       }
-
-      const data = await response.json()
-      $handler(data)
+      $handler(response.url)
     } catch (error: unknown) {
       setError(error)
       throw error
@@ -29,8 +27,8 @@ const usePlaceLocation = () => {
   return {
     isLoading,
     error,
-    locate,
+    photo,
   }
 }
 
-export default usePlaceLocation
+export default usePlacePhoto

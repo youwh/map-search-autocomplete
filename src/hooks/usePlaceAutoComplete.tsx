@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { key } from '../App'
 
-const api = 'https://maps.googleapis.com/maps/api/place/autocomplete/'
+const api = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
 
 const usePlaceAutoComplete = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -12,7 +12,7 @@ const usePlaceAutoComplete = () => {
     setError(null)
 
     try {
-      const response = await fetch(`${api}json?input=${$place}&key=${key}`)
+      const response = await fetch(`${api}?input=${$place}&key=${key}`)
       if (!response.ok) {
         throw new Error('Request failed')
       }

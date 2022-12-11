@@ -4,7 +4,6 @@ import { BehaviorSubject, debounceTime } from 'rxjs'
 import usePlaceAutoComplete from '../../hooks/usePlaceAutoComplete'
 import usePlaceLocation from '../../hooks/usePlaceLocation'
 import searchStore from '../../store/searchStore'
-import styles from './SearchInput.module.css'
 
 const inputChange = new BehaviorSubject('')
 const inputChanged = inputChange.asObservable()
@@ -20,8 +19,6 @@ function SearchInput() {
     const subscription = inputChanged.pipe(debounceTime(500)).subscribe((value) => {
       search(value, (response: any) => {
         // response handler
-        // console.log('sucess', response)
-
         const opts: OptionType[] = []
         response.predictions.map((predict: any) => {
           opts.push({
@@ -54,18 +51,22 @@ function SearchInput() {
         const location = response.result.geometry.location
         searchStore.search({
           ...selectedOpt,
+          ...response.result,
           center: location,
         })
+
+        console.log('respon', response)
+        console.log('selectedOpt', response)
       })
     }
   }
 
   return (
-    <div className={styles.inputContainer}>
+    <div>
       <AutoComplete
         // value={searchValue}
         options={options}
-        style={{ width: 200 }}
+        style={{ width: '100%' }}
         onSelect={onSelect}
         // onSearch={onSearch}
         onChange={onChange}
